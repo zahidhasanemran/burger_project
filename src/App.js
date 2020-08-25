@@ -1,17 +1,15 @@
-import React from 'react';
-import Layout from './components/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
+import React, { Component } from 'react';
 
+import Blog from './containers/Blog/Blog';
 
-
-function App() {
-  return (
-    <div className="">
-      <Layout>
-        <BurgerBuilder></BurgerBuilder>
-      </Layout>
-    </div>
-  );
+class App extends Component {
+  render() {
+    return (
+      <div className="App">
+        <Blog />
+      </div>
+    );
+  }
 }
 
 export default App;
