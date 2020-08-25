@@ -1,41 +1,51 @@
-import React, { Fragment, Component } from 'react';
-import classes from './Layout.module.css';
+import React from 'react';
+import { Fragment } from 'react';
 import Toolbar from '../Navigation/Toolbar/Toolbar';
+import classes from './Layout.module.css';
 import SideDrawer from '../Navigation/NavigationItems/SideDrawer/SideDrawer';
-import Backdrop from '../UI/Backdrop/Backdrop'
+import { Component } from 'react';
 
 class Layout extends Component {
 
     state = {
-        sidebar: false
+        showSideDraw: false
     }
 
-    backdropRemoved = () => {
-        this.setState({sidebar: false})
+    clsoeSideDraw = () => {
+        this.setState({showSideDraw: false});
     }
-    drawerToggle = () => {
+
+    OpenSideDraw = () => {
+        this.setState({showSideDraw: true});
+    }
+
+    SideDrawerTaggle = () => {
         this.setState((prevState) => {
-            return {sidebar: !prevState.sidebar}
+            return {showSideDraw: !prevState.showSideDraw}
         })
     }
 
-
     render(){
-        return(
+        return (
             <Fragment>
-                <Backdrop
-                    show = {this.state.sidebar}
-                    clicked={this.backdropRemoved}
-
-                />
-                <Toolbar drawerToggleClicked={this.drawerToggle}/>
-                <SideDrawer show = {this.state.sidebar}/>
+                <div>
+                    <Toolbar
+                        drawerClicked={this.SideDrawerTaggle}
+                    />
+                    <SideDrawer 
+                        show={this.state.showSideDraw} 
+                        clsoeSideDraw={this.clsoeSideDraw}
+                        openSide={this.OpenSideDraw}
+                        
+                        />
+                    Backdrop
+                </div>
                 <main className={classes.Content}>
                     {this.props.children}
                 </main>
             </Fragment>
-            )
+        );
     }
-    
 };
+
 export default Layout;

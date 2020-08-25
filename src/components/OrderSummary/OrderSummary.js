@@ -1,24 +1,24 @@
-import React, { Fragment } from 'react';
+import React from 'react';
+import classes from './OrderSummary.module.css';
 import Button from '../UI/Button/Button';
 
-
 const OrderSummary = (props) => {
-    let  ingreSummary = Object.keys(props.ingredients).map(inK => {
-        return <li key={inK}> {inK} {props.ingredients[inK]} </li>
-    });
-    // console.log(props);
+    
+    const ingr = Object.keys(props.ingredients).map(ing => {
+    return <li key={ing}> {ing} : <strong>{props.ingredients[ing]}</strong> </li>
+    })
+
     return (
-        <Fragment>
-            <h3>Your Order</h3>
-            <p>Delicious Burger with following ingredients</p>
+        <div className={classes.OrderSummary}>
+            <h3>Delicious burger with: </h3>
             <ul>
-                {ingreSummary}
+                {ingr}
             </ul>
-            <p><strong>Total Price: {props.price.toFixed(2)} </strong></p>
-            <p>Continue to checkout? </p>
-            <Button btnType="Danger" clicked={props.removeModal}>Cancel</Button>
-            <Button btnType="Success" clicked={props.continuPurchse}>Continue</Button>
-        </Fragment>
+            <p> <strong> Total Price: {props.totalPrice.toFixed(2)} </strong> </p>
+            <p>You want to continue ? </p>
+            <Button btnType="Success" clicked={props.orderContinue}>Continue</Button>
+            <Button btnType="Danger" clicked={props.modalclose}>Cancel</Button>
+        </div>
     );
 };
 

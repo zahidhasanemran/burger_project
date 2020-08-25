@@ -1,23 +1,20 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
+import Backdrop from '../../components/UI/Backdrop/Backdrop';
 
 
 const PRICE = {
-    salad: 0.4,
-    bacon: 0.6,
-    meat: 1.3,
-    cheese: 0.7
+    salad: 0.5,
+    bacon: 0.5,
+    cheese: 0.5,
+    meat: 1.6
 }
-
 
 class BurgerBuilder extends Component {
 
-    // constructor(props){
-    //     super(props);
-    // }
     state = {
         ingredients: {
             salad: 0,
@@ -25,100 +22,92 @@ class BurgerBuilder extends Component {
             cheese: 0,
             meat: 0
         },
-        total_price: 0.5,
-        purchasable: false,
-        purchasing: false
-
+        total_price: 2,
+        purchaseable: false,
+        orderModal: false
     }
 
-    updatePurchase = (ingredients) => {
-        
-        let sum = Object.keys(ingredients).map(ing => {
-            
-            return ingredients[ing]
-        }).reduce((sum, el)=>{
-            return sum + el;
-        },0);
-        console.log(sum);
-        
-        this.setState({
-            purchasable: sum > 0
-        });
 
+    updatePurchse = (ingredients) => {
+        let sum = Object.keys(ingredients).map(ink => {
+            return ingredients[ink]
+        }).reduce((prev, curr) => {
+            return prev + curr;
+        }, 0);
+        
+        this.setState({purchaseable: sum > 0})
     }
 
-    addIngredients = (type) => {
-        let menu = this.state.ingredients[type] + 1;
-        let updateState = {
-            ...this.state.ingredients,
-            ...this.state.total_price
-        }
-        updateState[type] = menu;
+    addIngredient = (type) => {
+        let oldCount = this.state.ingredients[type],
+        updateCount = oldCount + 1,
+        updateState = {...this.state.ingredients};
+        updateState[type] = updateCount;
 
-        let price = this.state.total_price + Number(PRICE[type]);
-        
+        let totalPrice = this.state.total_price,
+        newPrice = PRICE[type] + totalPrice;
 
         this.setState({
             ingredients: updateState,
-            total_price: price
+            total_price: newPrice
         })
-        this.updatePurchase(updateState)
-        // console.log(updateState);
-    }
+        this.updatePurchse(updateState);
+
+    };
 
     removeIngredient = (type) => {
-        let updateState = {
-            ...this.state.ingredients,
-            ...this.state.total_price
-        }
-        let menu = this.state.ingredients[type] === 0 ? this.state.ingredients[type] : this.state.ingredients[type] - 1;
-        updateState[type] = menu;
+        let el = this.state.ingredients[type],
+        redEl = el - (this.state.ingredients[type] === 0 ? 0 : 1),
+        updateState = {...this.state.ingredients};
+        updateState[type] = redEl;
 
-        let price = this.state.total_price - (this.state.ingredients[type] === 0 ? this.state.ingredients[type] : Number(PRICE[type]))
+        let totalPrice = this.state.total_price,
+        updatePrice = totalPrice - (this.state.ingredients[type] === 0 ? 0 : PRICE[type]);
 
         this.setState({
             ingredients: updateState,
-            total_price: price
+            total_price: updatePrice
         })
-        this.updatePurchase(updateState)
-
-
+        this.updatePurchse(updateState);
     }
 
-    purchasingModal = () => {
-        this.setState({purchasing: true});
-    }
-    purchaseContinue = () => {
-        alert('you continue')
+    modalClose = () => {
+        this.setState({orderModal: false})
     }
 
-    removeModalBackdrop = () => {
-        this.setState({purchasing: false});
+    modalOpen = () => {
+        this.setState({orderModal: true})
     }
+
+    
+    orderContinue = () => {
+        console.log("Order Continue...");
+    }
+
+
+
 
     render() {
         return (
-            <Fragment>
-                
-                <Modal show={this.state.purchasing} removeModal={this.removeModalBackdrop}> 
+            <div>
+                <Backdrop show={this.state.orderModal} clicked={this.modalClose} />
+                <Modal show={this.state.orderModal}>
                     <OrderSummary 
-                    ingredients={this.state.ingredients} 
-                    removeModal={this.removeModalBackdrop}
-                    continuPurchse={this.purchaseContinue}
-                    price={this.state.total_price}
+                        ingredients = {this.state.ingredients}
+                        modalclose={this.modalClose}
+                        orderContinue={this.orderContinue}
+                        totalPrice={this.state.total_price}
                     />
-                </Modal>
-                <Burger ingredients={this.state.ingredients} ></Burger>
+                </Modal> 
+                <Burger ingredients={this.state.ingredients}></Burger>
                 <BuildControls 
-                    currentPrice={this.state.total_price} 
-                    added={this.addIngredients} 
-                    price={PRICE} 
-                    removed={this.removeIngredient}
-                    purchasable={this.state.purchasable}
-                    ordered = {this.purchasingModal}
-
-                ></BuildControls>
-            </Fragment>
+                    add={this.addIngredient}
+                    rmv={this.removeIngredient}
+                    totalPrice={this.state.total_price}
+                    purchaseable={this.state.purchaseable}
+                    modalOpen={this.modalOpen}
+                />
+            </div>
         );
     }
 }

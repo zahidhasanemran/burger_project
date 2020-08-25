@@ -2,36 +2,34 @@ import React from 'react';
 import classes from './BuildControls.module.css';
 import BuildControl from './BuildControl/BuildControl';
 
-const controls = [
-    {label: "Salad", type:"salad"},
-    {label: "Cheese", type:"cheese"},
-    {label: "Bacon", type:"bacon"},
-    {label: "Meat", type:"meat"}
+
+let controls = [
+    {label: 'Salad', type:"salad"},
+    {label: 'Bacon', type:"bacon"},
+    {label: 'Cheese', type:"cheese"},
+    {label: 'Meat', type:"meat"}
 ]
 
 const BuildControls = (props) => {
 
     return (
         <div className={classes.BuildControls}>
-            <p>Current Price: {props.currentPrice.toFixed(2)} </p>
-            {controls.map(control => {
-                return <BuildControl
-                    key={control.label}
-                    label={control.label}
-                    added={() => props.added(control.type)}
-                    price={props.price[control.type]}
-                    removed={() => props.removed(control.type)}
-                />
+            <p> Total Price: {props.totalPrice.toFixed(2)} </p>
+            {controls.map(con => {
+               return <BuildControl 
+                label={con.label} 
+                key={con.label} 
+                remove={() => props.rmv(con.type)}
+                add={() => props.add(con.type)}
+               />
             })}
             <button 
-            disabled={!props.purchasable} 
-            className={classes.OrderButton}
-            onClick={props.ordered}
-            >ORDER NOW</button>
-            
+                className={classes.OrderButton}
+                disabled={!props.purchaseable}
+                onClick={props.modalOpen}
+            >Order Now</button>
         </div>
     );
 };
-
 
 export default BuildControls;
