@@ -1,67 +1,42 @@
 import React, { Component } from 'react';
-
-import Post from '../../components/Post/Post';
-import FullPost from '../../components/FullPost/FullPost';
-import NewPost from '../../components/NewPost/NewPost';
 import './Blog.css';
-import Axios from 'axios';
-
+import Posts from './Posts/Posts';
+import { Route } from 'react-router';
+import NewPost from '../../containers/Blog/NewPost/NewPost'
+import { Link } from 'react-router-dom';
 
 
 class Blog extends Component {
 
-    state = {
-        posts: [],
-        fullPostId: null,
-        error: false
-    }
+    
 
-    componentDidMount(){
-        Axios.get('/posts').then(res =>{
-            let maniDat = res.data.slice(0, 4);
-            let updatePost = maniDat.map((post) => {
-                return {
-                    ...post,
-                    author: 'max'
-                }
-            })
-            return this.setState({posts: updatePost});
-        })
-        .catch(error => {
-            this.setState({error: true})
-        });
-    }
-
-    passidFullpost = (id) =>{
-        this.setState({fullPostId: id});
-    }
+    
 
     render () {
 
-        let posts = <p style={{textAlign: 'center'}}>Something went wrong</p>
-
-        if(!this.state.error){
-            posts = this.state.posts.map((post, i) => {
-                return <Post 
-                    key={i}
-                    title={post.title}
-                    author={post.author}
-                    clicked={() => this.passidFullpost(post.id)}
-                />
-            })
-        }
+        
 
         return (
-            <div>
-                <section className="Posts">
-                    {posts}
-                </section>
-                <section>
+            <div className="Blog">
+                <ul>
+                    <li>
+                        <Link to="/">Home</Link>
+                        <Link to="/new-post">New Post</Link>
+                    </li>
+                </ul>
+                
+
+                {/* <section>
                     <FullPost id={this.state.fullPostId} />
                 </section>
                 <section>
                     <NewPost />
-                </section>
+                </section> */}
+
+                <Route exact path="/" component={Posts} /> 
+                <Route exact path="/new-post" component={NewPost} /> 
+                
+                
             </div>
         );
     }

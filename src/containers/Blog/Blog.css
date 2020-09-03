@@ -5,3 +5,20 @@
     width: 80%;
     margin: auto;
 }
+
+.Blog ul{
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    width: 100%;
+    text-align: center;
+    margin-bottom: 50px;
+    margin-top: 30px;
+}
+
+.Blog ul li a{
+    display: inline-block;
+    padding: 10px 20px;
+    text-decoration: none;
+    color: #cc8809;
+}
