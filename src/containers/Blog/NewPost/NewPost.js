@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
-
 import './NewPost.css';
 import Axios from 'axios';
 
+
 class NewPost extends Component {
+
     state = {
         title: '',
         content: '',
@@ -11,13 +12,15 @@ class NewPost extends Component {
     }
 
     postData = () => {
+
         const data = {
             title: this.state.title,
             content: this.state.content,
             author: this.state.author
         }
-        Axios.post('/posts/', data)
-        .then(res => {console.log(res);})
+        Axios.post('/posts', data)
+        .then(res => {console.log(res);});
+
     }
 
     componentDidMount(){
@@ -41,6 +44,7 @@ class NewPost extends Component {
             </div>
         );
     }
+
 }
 
 export default NewPost;
