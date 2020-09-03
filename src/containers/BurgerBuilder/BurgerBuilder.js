@@ -1,9 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
-import Backdrop from '../../components/UI/Backdrop/Backdrop';
+import axios from 'axios';
+import orderInstance from '../../axios/axios-order';
+import Spinner from '../../components/UI/Spinner/Spinner';
+import ErrorHandling from '../../ErrorHandling/ErrorHandling';
 
 
 const PRICE = {
@@ -16,15 +19,21 @@ const PRICE = {
 class BurgerBuilder extends Component {
 
     state = {
-        ingredients: {
-            salad: 0,
-            bacon: 0,
-            cheese: 0,
-            meat: 0
-        },
+        ingredients: null,
         total_price: 2,
         purchaseable: false,
-        orderModal: false
+        orderModal: false,
+        loading: false
+    }
+
+    componentDidMount(){
+        axios.get('https://react-burger-007.firebaseio.com/ingredients.json')
+        .then(res => {
+            this.setState({ingredients: res.data});
+        })
+        .catch(error => {
+            console.log(error);
+        })
     }
 
 
@@ -81,35 +90,82 @@ class BurgerBuilder extends Component {
 
     
     orderContinue = () => {
-        console.log("Order Continue...");
+        // console.log("Order Continue...");
+        this.setState({loading: true});
+        const order = {
+            ingredients: this.state.ingredients,
+            price: this.state.total_price,
+            customer: {
+                name: "Zahid Hasan Emran",
+                age: '26',
+                address: {
+                    street: "Test street",
+                    country: "Bangladesh"
+                },
+                email: "demo@gmail.com"
+            },
+            deliveryMethod: 'fastest'
+        }
+        orderInstance.post('/orders.json', order)
+        .then(res => {
+            this.setState({
+                loading: false,
+                orderModal: false
+            })
+        })
+        .catch(error => {
+            this.setState({
+                loading: false,
+                orderModal: false
+            })
+        });
     }
 
 
 
 
     render() {
+
+        let OrderSummaryVar = null;
+        let burger = <Spinner />
+        if(this.state.ingredients){
+            OrderSummaryVar = <OrderSummary 
+            ingredients = {this.state.ingredients}
+            modalclose={this.modalClose}
+            orderContinue={this.orderContinue}
+            totalPrice={this.state.total_price}
+        />;
+
+        burger = (
+        <Fragment>
+            <Burger ingredients={this.state.ingredients}></Burger>
+            <BuildControls 
+                add={this.addIngredient}
+                rmv={this.removeIngredient}
+                totalPrice={this.state.total_price}
+                purchaseable={this.state.purchaseable}
+                modalOpen={this.modalOpen}
+            />
+        </Fragment>
+        )
+
+
+        }
+
+        if(this.state.loading) {
+            OrderSummaryVar = <Spinner/>
+        }
+
         return (
             <div>
-                <Backdrop show={this.state.orderModal} clicked={this.modalClose} />
-                <Modal show={this.state.orderModal}>
-                    <OrderSummary 
-                        ingredients = {this.state.ingredients}
-                        modalclose={this.modalClose}
-                        orderContinue={this.orderContinue}
-                        totalPrice={this.state.total_price}
-                    />
+                
+                <Modal show={this.state.orderModal} clicked={this.modalClose}>
+                    {OrderSummaryVar}
                 </Modal> 
-                <Burger ingredients={this.state.ingredients}></Burger>
-                <BuildControls 
-                    add={this.addIngredient}
-                    rmv={this.removeIngredient}
-                    totalPrice={this.state.total_price}
-                    purchaseable={this.state.purchaseable}
-                    modalOpen={this.modalOpen}
-                />
-            </div>
+                {burger}
+            </div>  
         );
     }
 }
 
-export default BurgerBuilder;
+export default ErrorHandling(BurgerBuilder, orderInstance);
