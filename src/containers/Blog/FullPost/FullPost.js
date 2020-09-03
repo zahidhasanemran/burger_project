@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import './FullPost.css';
 import Axios from 'axios';
+import { withRouter } from 'react-router';
 
 class FullPost extends Component {
 
@@ -8,10 +9,12 @@ class FullPost extends Component {
         singlePost: null
     }
 
-    componentDidUpdate(){
-        if(this.props.id){
-            if(!this.state.singlePost || (this.state.singlePost && this.state.singlePost.id !== this.props.id)){
-                Axios.get('https://jsonplaceholder.typicode.com/posts/'+this.props.id)
+    componentDidMount(){
+        // console.log(this.props.match.params.postIdForRoute);
+        let id = this.props.match.params.postIdForRoute;
+        if(id){
+            if(!this.state.singlePost || (this.state.singlePost && this.state.singlePost.id !== id)){
+                Axios.get('https://jsonplaceholder.typicode.com/posts/'+id)
                 .then(response => {
                     this.setState({singlePost: response.data})
                 })
@@ -28,7 +31,7 @@ class FullPost extends Component {
 
     render () {
         let post = <p style={{textAlign: 'center'}}>Please select a post .</p>;
-
+        
         if(this.props.id){
             post = <p style={{textAlign: 'center'}}>Loading...</p>
         }
@@ -50,4 +53,4 @@ class FullPost extends Component {
     }
 }
 
-export default FullPost;
+export default withRouter(FullPost);

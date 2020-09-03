@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import Post from '../../../components/Post/Post'
 import Axios from 'axios';
+import { Link } from 'react-router-dom';
 
 
 class Posts extends Component {
@@ -8,7 +9,6 @@ class Posts extends Component {
 
     state = {
         posts: [],
-        fullPostId: null,
         error: false
     }
 
@@ -42,12 +42,16 @@ class Posts extends Component {
 
         if(!this.state.error){
             posts = this.state.posts.map((post, i) => {
-                return <Post 
-                    key={i}
-                    title={post.title}
-                    author={post.author}
-                    clicked={() => this.passidFullpost(post.id)}
-                />
+                return (
+                    <Link to={'/'+post.id} key={post.id}>
+                        <Post 
+                            
+                            title={post.title}
+                            author={post.author}
+                            clicked={() => this.passidFullpost(post.id)}
+                        />
+                    </Link>
+                )
             })
         }
 
