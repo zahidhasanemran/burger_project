@@ -1,11 +1,10 @@
 import React from 'react';
 import './Post.css';
-import { withRouter } from 'react-router';
 
 
 
 const Post = (props) => {
-    console.log(props);
+    // console.log(props);
     return (
         <article className="Post" onClick={props.clicked}>
             <h1> {props.title} </h1>
@@ -16,4 +15,4 @@ const Post = (props) => {
     );
 };
 
-export default withRouter(Post);
+export default Post;

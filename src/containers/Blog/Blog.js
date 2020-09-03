@@ -3,7 +3,7 @@ import './Blog.css';
 import Posts from './Posts/Posts';
 import { Route } from 'react-router';
 import NewPost from '../../containers/Blog/NewPost/NewPost'
-import { Link } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 
 
 class Blog extends Component {
@@ -20,8 +20,11 @@ class Blog extends Component {
             <div className="Blog">
                 <ul>
                     <li>
-                        <Link to="/">Home</Link>
-                        <Link to="/new-post">New Post</Link>
+                        <NavLink activeClassName="highlight" to="/" exact >Home</NavLink>
+                        <NavLink to="/new-post" exact activeStyle={{
+                            color: 'red',
+                            textDecoration: 'underline'
+                        }} >New Post</NavLink>
                     </li>
                 </ul>
                 

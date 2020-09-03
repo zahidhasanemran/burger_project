@@ -16,6 +16,9 @@
     margin-top: 30px;
 }
 
+.Blog ul li a.highlight{
+    color: rgb(5, 190, 223);
+}
 .Blog ul li a{
     display: inline-block;
     padding: 10px 20px;
