@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import Post from '../../../components/Post/Post'
 import Axios from 'axios';
 import FullPost from '../FullPost/FullPost';
-import { Route } from 'react-router';
+import { Route, withRouter } from 'react-router';
 
 
 class Posts extends Component {
@@ -66,4 +66,4 @@ class Posts extends Component {
     }
 }
 
-export default Posts;
+export default withRouter(Posts);

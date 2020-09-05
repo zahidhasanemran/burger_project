@@ -1,10 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Suspense } from 'react';
 import './Blog.css';
-import Posts from './Posts/Posts';
+// import Posts from './Posts/Posts';
 import { Route } from 'react-router';
 // import NewPost from '../../containers/Blog/NewPost/NewPost'
 import { NavLink, Switch, Redirect } from 'react-router-dom';
 import asyncComLoader from '../../hoc/asyncComLoader';
+const Posts = React.lazy(() => import('./Posts/Posts'))
+
 
 const asyCoLoaderCalled = asyncComLoader(()=>{
     return import('../../containers/Blog/NewPost/NewPost');
@@ -35,8 +37,12 @@ class Blog extends Component {
 
                <Switch>
                     {this.state.auth ? <Route path="/new-post" component={asyCoLoaderCalled} /> : null } 
-                    <Route exact path="/" component={Posts} /> 
-                    <Route path="/posts" component={Posts} /> 
+                    <Route exact path="/" render={()=> <h1>Home page</h1>} /> 
+                    <Route path="/posts" render={() => 
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <Posts {...this.props} />
+                        </Suspense>
+                    } /> 
                     {/* <Redirect from="/" to="/posts" /> */}
                     <Route render={() => <h2>Not Found</h2>} />
                     {/* <Route component={errorPage} /> */}
