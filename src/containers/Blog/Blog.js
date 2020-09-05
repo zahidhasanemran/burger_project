@@ -3,7 +3,7 @@ import './Blog.css';
 import Posts from './Posts/Posts';
 import { Route } from 'react-router';
 import NewPost from '../../containers/Blog/NewPost/NewPost'
-import { NavLink, Switch } from 'react-router-dom';
+import { NavLink, Switch, Redirect } from 'react-router-dom';
 
 class Blog extends Component {
 
@@ -28,6 +28,7 @@ class Blog extends Component {
                <Switch>
                     <Route path="/new-post" component={NewPost} /> 
                     <Route path="/posts" component={Posts} /> 
+                    <Redirect from="/" to="/posts" />
                     
                </Switch>
 
