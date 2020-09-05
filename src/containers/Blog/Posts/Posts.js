@@ -1,7 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import Post from '../../../components/Post/Post'
 import Axios from 'axios';
-import { Link } from 'react-router-dom';
+import FullPost from '../FullPost/FullPost';
+import { Route } from 'react-router';
 
 
 class Posts extends Component {
@@ -32,12 +33,10 @@ class Posts extends Component {
 
     passidFullpost = (id) =>{
         // this.props.history.push('/'+id)
-        this.props.history.push({pathname: '/'+id})
+        this.props.history.push({pathname:'/posts/'+id})
     }
 
     render() {
-
-        
 
         let posts = <p style={{textAlign: 'center'}}>Something went wrong</p>
 
@@ -57,9 +56,12 @@ class Posts extends Component {
         }
 
         return (
-            <section className="Posts">
-                {posts}
-            </section>
+            <Fragment>
+                <section className="Posts">
+                    {posts}
+                </section>
+                <Route path={this.props.match.url + '/:postIdForRoute'} exact component={FullPost} /> 
+            </Fragment>
         );
     }
 }

@@ -11,9 +11,17 @@ class FullPost extends Component {
 
     componentDidMount(){
         // console.log(this.props.match.params.postIdForRoute);
+        this.loadData()
+    }
+
+    componentDidUpdate(){
+        this.loadData()
+    }
+
+    loadData = () => {
         let id = this.props.match.params.postIdForRoute;
         if(id){
-            if(!this.state.singlePost || (this.state.singlePost && this.state.singlePost.id !== id)){
+            if(!this.state.singlePost || (this.state.singlePost && this.state.singlePost.id != id)){
                 Axios.get('https://jsonplaceholder.typicode.com/posts/'+id)
                 .then(response => {
                     this.setState({singlePost: response.data})
@@ -23,7 +31,7 @@ class FullPost extends Component {
     }
 
     deletePost = () => {
-        Axios.delete('https://jsonplaceholder.typicode.com/posts/'+this.props.id)
+        Axios.delete('https://jsonplaceholder.typicode.com/posts/'+this.props.match.params.postIdForRoute)
                 .then(response => {
                     console.log(response);
                 })
