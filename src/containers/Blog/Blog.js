@@ -7,7 +7,9 @@ import { NavLink, Switch, Redirect } from 'react-router-dom';
 
 class Blog extends Component {
 
-    
+    state ={
+        auth: false
+    }
 
     
 
@@ -21,12 +23,13 @@ class Blog extends Component {
                     <li>
                         <NavLink activeClassName="highlight" to="/posts" exact >Posts</NavLink>
                         <NavLink to="/new-post" exact activeStyle={{color: 'red',textDecoration: 'underline'}} >New Post</NavLink>
+                        <NavLink to="/login" onClick={() => this.setState({auth: !this.state.auth})}> {this.state.auth ? 'Dashboard' : 'Login'} </NavLink>
                     </li>
                 </ul>
                 
 
                <Switch>
-                    <Route path="/new-post" component={NewPost} /> 
+                    {this.state.auth ? <Route path="/new-post" component={NewPost} /> : null } 
                     <Route path="/posts" component={Posts} /> 
                     <Redirect from="/" to="/posts" />
                     
