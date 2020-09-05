@@ -2,8 +2,13 @@ import React, { Component } from 'react';
 import './Blog.css';
 import Posts from './Posts/Posts';
 import { Route } from 'react-router';
-import NewPost from '../../containers/Blog/NewPost/NewPost'
+// import NewPost from '../../containers/Blog/NewPost/NewPost'
 import { NavLink, Switch, Redirect } from 'react-router-dom';
+import asyncComLoader from '../../hoc/asyncComLoader';
+
+const asyCoLoaderCalled = asyncComLoader(()=>{
+    return import('../../containers/Blog/NewPost/NewPost');
+});
 
 class Blog extends Component {
 
@@ -29,7 +34,7 @@ class Blog extends Component {
                 
 
                <Switch>
-                    {this.state.auth ? <Route path="/new-post" component={NewPost} /> : null } 
+                    {this.state.auth ? <Route path="/new-post" component={asyCoLoaderCalled} /> : null } 
                     <Route exact path="/" component={Posts} /> 
                     <Route path="/posts" component={Posts} /> 
                     {/* <Redirect from="/" to="/posts" /> */}
