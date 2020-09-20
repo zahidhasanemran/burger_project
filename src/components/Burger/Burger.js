@@ -2,8 +2,11 @@ import React from 'react';
 import BurgerIngredient from './BurgerIngredient/BurgerIngredient';
 import classes from './Burger.module.css';
 
+
+
 const Burger = (props) => {
-    
+
+    // console.log(props);
 
     // Objectkeys(object) it gives an array of the keys 
     // Array(3) return 3 empty space with length of 3 

@@ -19,14 +19,17 @@ const PRICE = {
 class BurgerBuilder extends Component {
 
     state = {
-        ingredients: null,
-        total_price: 2,
-        purchaseable: false,
-        orderModal: false,
-        loading: false
+        // ingredients: null,
+        // total_price: 2,
+        // purchaseable: false,
+        // orderModal: false,
+        // loading: false
     }
 
     componentDidMount(){
+
+        // console.log(this.props);
+
         axios.get('https://react-burger-007.firebaseio.com/ingredients.json')
         .then(res => {
             this.setState({ingredients: res.data});
@@ -91,34 +94,53 @@ class BurgerBuilder extends Component {
     
     orderContinue = () => {
         // console.log("Order Continue...");
-        this.setState({loading: true});
-        const order = {
-            ingredients: this.state.ingredients,
-            price: this.state.total_price,
-            customer: {
-                name: "Zahid Hasan Emran",
-                age: '26',
-                address: {
-                    street: "Test street",
-                    country: "Bangladesh"
-                },
-                email: "demo@gmail.com"
-            },
-            deliveryMethod: 'fastest'
+        // this.setState({loading: true});
+        // const order = {
+        //     ingredients: this.state.ingredients,
+        //     price: this.state.total_price,
+        //     customer: {
+        //         name: "Zahid Hasan Emran",
+        //         age: '26',
+        //         address: {
+        //             street: "Test street",
+        //             country: "Bangladesh"
+        //         },
+        //         email: "demo@gmail.com"
+        //     },
+        //     deliveryMethod: 'fastest'
+        // }
+        // orderInstance.post('/orders.json', order)
+        // .then(res => {
+        //     this.setState({
+        //         loading: false,
+        //         orderModal: false
+        //     })
+        // })
+        // .catch(error => {
+        //     this.setState({
+        //         loading: false,
+        //         orderModal: false
+        //     })
+        // });
+
+        const queryPar = [];
+
+        for (let i in this.state.ingredients) {
+            queryPar.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
+            
         }
-        orderInstance.post('/orders.json', order)
-        .then(res => {
-            this.setState({
-                loading: false,
-                orderModal: false
-            })
+        queryPar.push('price=' + this.state.total_price);
+
+        const queryString = queryPar.join('&');
+
+        this.props.history.push({
+            pathname: '/checkout',
+            search: '?' + queryString
         })
-        .catch(error => {
-            this.setState({
-                loading: false,
-                orderModal: false
-            })
-        });
+
+
+
+
     }
 
 
