@@ -11,7 +11,7 @@ let controls = [
 ]
 
 const BuildControls = (props) => {
-
+    // console.log(props);
     return (
         <div className={classes.BuildControls}>
             <p> Total Price: {props.totalPrice.toFixed(2)} </p>

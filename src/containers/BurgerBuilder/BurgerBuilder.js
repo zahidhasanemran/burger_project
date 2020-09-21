@@ -11,21 +11,13 @@ import { connect } from 'react-redux';
 import * as actionType from '../../store/actions/BurgerActions'
 
 
-const PRICE = {
-    salad: 0.5,
-    bacon: 0.5,
-    cheese: 0.5,
-    meat: 1.6
-}
 
 class BurgerBuilder extends Component {
 
     state = {
-        // ingredients: null,
-        total_price: 2,
-        // purchaseable: false,
-        // orderModal: false,
-        // loading: false
+        purchaseable: false,
+        orderModal: false,
+        loading: false
     }
 
     componentDidMount(){
@@ -49,41 +41,9 @@ class BurgerBuilder extends Component {
             return prev + curr;
         }, 0);
         
-        this.setState({purchaseable: sum > 0})
+        return sum > 0
     }
 
-    // addIngredient = (type) => {
-    //     let oldCount = this.state.ingredients[type],
-    //     updateCount = oldCount + 1,
-    //     updateState = {...this.state.ingredients};
-    //     updateState[type] = updateCount;
-
-    //     let totalPrice = this.state.total_price,
-    //     newPrice = PRICE[type] + totalPrice;
-
-    //     this.setState({
-    //         ingredients: updateState,
-    //         total_price: newPrice
-    //     })
-    //     this.updatePurchse(updateState);
-
-    // };
-
-    // removeIngredient = (type) => {
-    //     let el = this.state.ingredients[type],
-    //     redEl = el - (this.state.ingredients[type] === 0 ? 0 : 1),
-    //     updateState = {...this.state.ingredients};
-    //     updateState[type] = redEl;
-
-    //     let totalPrice = this.state.total_price,
-    //     updatePrice = totalPrice - (this.state.ingredients[type] === 0 ? 0 : PRICE[type]);
-
-    //     this.setState({
-    //         ingredients: updateState,
-    //         total_price: updatePrice
-    //     })
-    //     this.updatePurchse(updateState);
-    // }
 
     modalClose = () => {
         this.setState({orderModal: false})
@@ -95,54 +55,7 @@ class BurgerBuilder extends Component {
 
     
     orderContinue = () => {
-        // console.log("Order Continue...");
-        // this.setState({loading: true});
-        // const order = {
-        //     ingredients: this.state.ingredients,
-        //     price: this.state.total_price,
-        //     customer: {
-        //         name: "Zahid Hasan Emran",
-        //         age: '26',
-        //         address: {
-        //             street: "Test street",
-        //             country: "Bangladesh"
-        //         },
-        //         email: "demo@gmail.com"
-        //     },
-        //     deliveryMethod: 'fastest'
-        // }
-        // orderInstance.post('/orders.json', order)
-        // .then(res => {
-        //     this.setState({
-        //         loading: false,
-        //         orderModal: false
-        //     })
-        // })
-        // .catch(error => {
-        //     this.setState({
-        //         loading: false,
-        //         orderModal: false
-        //     })
-        // });
-
-        const queryPar = [];
-
-        for (let i in this.state.ingredients) {
-            queryPar.push(encodeURIComponent(i) + '=' + encodeURIComponent(this.state.ingredients[i]));
-            
-        }
-        queryPar.push('price=' + this.state.total_price);
-
-        const queryString = queryPar.join('&');
-
-        this.props.history.push({
-            pathname: '/checkout',
-            search: '?' + queryString
-        })
-
-
-
-
+        this.props.history.push('/checkout')
     }
 
 
@@ -157,17 +70,17 @@ class BurgerBuilder extends Component {
             ingredients = {this.props.ing}
             modalclose={this.modalClose}
             orderContinue={this.orderContinue}
-            totalPrice={this.state.total_price}
+            totalPrice={this.props.price}
         />;
-
+            // console.log(this.props);
         burger = (
         <Fragment>
             <Burger ingredients={this.props.ing}></Burger>
             <BuildControls 
                 add={this.props.onAddIng}
                 rmv={this.props.onRemoveIng}
-                totalPrice={this.state.total_price}
-                purchaseable={this.state.purchaseable}
+                totalPrice={this.props.price}
+                purchaseable={this.updatePurchse(this.props.ing)}
                 modalOpen={this.modalOpen}
             />
         </Fragment>
@@ -193,8 +106,10 @@ class BurgerBuilder extends Component {
 }
 
 const mapStateToProps = state => {
+        // console.log(state.total_price);
     return {
-        ing: state.ingredients
+        ing: state.ingredients,
+        price: state.total_price
     }
 }
 const mapDispatchToProps = dispatch => {
