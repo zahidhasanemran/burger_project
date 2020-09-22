@@ -9,7 +9,7 @@ import { createStore } from 'redux';
 import burgerReducer from './store/reducer/BurgerReducer';
 
 
-const burgerStore = createStore(burgerReducer);
+const burgerStore = createStore(burgerReducer, window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__());
 
 
 

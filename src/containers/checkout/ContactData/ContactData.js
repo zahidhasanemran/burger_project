@@ -99,16 +99,16 @@ class ContactData extends Component {
         e.preventDefault();
         // console.log(this.props.ingredients);
 
-        console.log("Order Continue...");
+        // console.log("Order Continue...");
         this.setState({loading: true});
         const formData = {};
         for (const key in this.state.orderForm) {
             formData[key] = this.state.orderForm[key]
         }
-        console.log(formData);
+        // console.log(formData);
 
         const order = {
-            ingredients: this.props.ingredients,
+            ingredients: this.props.ing,
             price: this.props.price,
             orderData : formData
             
@@ -150,7 +150,7 @@ class ContactData extends Component {
         let isFormValid = true;
         for(let fromInput in orderFrmCpd){
             isFormValid = isFormValid && orderFrmCpd[fromInput].valid;
-            console.log(orderFrmCpd[fromInput]);
+            // console.log(orderFrmCpd[fromInput]);
         };
         this.setState({
             orderForm: orderFrmCpd,
