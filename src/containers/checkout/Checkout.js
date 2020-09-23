@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CheckoutSummary from '../../components/CheckoutSummary/CheckoutSummary';
-import { Route } from 'react-router-dom';
+import { Redirect, Route } from 'react-router-dom';
 import ContactData from './ContactData/ContactData';
 import { connect } from 'react-redux';
 
@@ -42,15 +42,22 @@ class Checkout extends Component {
     
     
     render() {
-        // console.log(this.props.match.path);
-        return (
-            <div>
+        
+        let chckout = <Redirect to="/"/>
+        if(this.props.ing){
+            chckout = (
                 <CheckoutSummary 
-                    ingredients={this.state.ingredients} 
+                    ingredients={this.props.ing} 
                     chekcoutCancel={this.chekcoutCancelHandle}
                     chekcoutContinue={this.chekcoutContiHandle} 
 
                 />
+            )
+        }
+
+        return (
+            <div>
+                {chckout}
                 <Route path={this.props.match.path + '/contact-form'}  component={ContactData}/>
 
 

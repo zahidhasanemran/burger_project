@@ -5,7 +5,8 @@ import orderInstance from '../../../axios/axios-order'
 import Spinner from '../../../components/UI/Spinner/Spinner';
 import Input from '../../../components/UI/Input/Input';
 import { connect } from 'react-redux';
-
+import ErrorHandling from '../../../ErrorHandling/ErrorHandling';
+import * as actions from '../../../store/actions/index'
 
 class ContactData extends Component {
 
@@ -91,21 +92,16 @@ class ContactData extends Component {
                 touched: false
             },
         },
-        formIsValid: false,
-        loading: false
+        formIsValid: false
     }
 
     orderHandeled = (e) => {
         e.preventDefault();
-        // console.log(this.props.ingredients);
-
-        // console.log("Order Continue...");
-        this.setState({loading: true});
+        
         const formData = {};
         for (const key in this.state.orderForm) {
             formData[key] = this.state.orderForm[key]
         }
-        // console.log(formData);
 
         const order = {
             ingredients: this.props.ing,
@@ -113,20 +109,9 @@ class ContactData extends Component {
             orderData : formData
             
         }
-        orderInstance.post('/orders.json', order)
-        .then(res => {
-            this.setState({
-                loading: false,
-                // orderModal: false
-            });
-            this.props.history.push('/')
-        })
-        .catch(error => {
-            this.setState({
-                loading: false,
-                // orderModal: false
-            })
-        });
+        
+
+        this.props.orderRun(order);
 
     }
 
@@ -222,7 +207,7 @@ class ContactData extends Component {
 
                 </form>
         );
-        if(this.state.loading){
+        if(this.props.loading){
             form = <Spinner />
         }
 
@@ -236,10 +221,19 @@ class ContactData extends Component {
 }
 
 const mapStateToProps = state => {
+    console.log(state);
     return {
         ing: state.ingredients,
-        price: state.total_price
+        price: state.total_price,
+        loading: state.loading
     }
 }
 
-export default connect(mapStateToProps)(ContactData);
+const mapDispatchToProps = dispatch => {
+    return {
+        orderRun: (orderData) => dispatch(actions.orderStored(orderData)),
+        orderStart: () => dispatch(actions.orderStart())
+    }
+}
+
+export default connect(mapStateToProps, mapDispatchToProps)(ErrorHandling(ContactData, orderInstance));

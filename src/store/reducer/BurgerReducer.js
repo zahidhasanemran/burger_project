@@ -1,14 +1,10 @@
-import * as actionType from '../actions/BurgerActions';
+import * as actionType from '../actions/actionTypes';
 
 
 let initailState = {
-    ingredients: {
-        salad: 0,
-        bacon: 0,
-        cheese: 0,
-        meat: 0
-    },
-    total_price: 2
+    ingredients: null,
+    total_price: 2,
+    error: false
     // purchaseable: false,
     // orderModal: false,
     // loading: false
@@ -42,6 +38,19 @@ const burgerReducer = (state = initailState, action) => {
                 },
                 total_price: state.total_price - PRICE[action.ingredientName]
             }
+
+            case actionType.FAILED_INGREDIENT:
+                return {
+                    ...state,
+                    error: true
+                }
+
+            case actionType.SET_INGREDIENT:
+                return {
+                    ...state,
+                    ingredients: action.ingredients, // check payload name 
+                    error: false
+                }
     
         default:
             return state;

@@ -3,12 +3,12 @@ import Burger from '../../components/Burger/Burger';
 import BuildControls from '../../components/Burger/BuildControls/BuildControls';
 import Modal from '../../components/Modal/Modal';
 import OrderSummary from '../../components/OrderSummary/OrderSummary';
-import axios from 'axios';
+// import axios from 'axios';
 import orderInstance from '../../axios/axios-order';
 import Spinner from '../../components/UI/Spinner/Spinner';
 import ErrorHandling from '../../ErrorHandling/ErrorHandling';
 import { connect } from 'react-redux';
-import * as actionType from '../../store/actions/BurgerActions'
+import * as burgerActions from '../../store/actions/index'
 
 
 
@@ -23,14 +23,14 @@ class BurgerBuilder extends Component {
     componentDidMount(){
 
         // console.log(this.props);
-
-        axios.get('https://react-burger-007.firebaseio.com/ingredients.json')
-        .then(res => {
-            this.setState({ingredients: res.data});
-        })
-        .catch(error => {
-            console.log(error);
-        })
+        this.props.initIngredt();
+        // axios.get('https://react-burger-007.firebaseio.com/ingredients.json')
+        // .then(res => {
+        //     this.setState({ingredients: res.data});
+        // })
+        // .catch(error => {
+        //     console.log(error);
+        // })
     }
 
 
@@ -64,26 +64,26 @@ class BurgerBuilder extends Component {
     render() {
 
         let OrderSummaryVar = null;
-        let burger = <Spinner />
+        let burger = <Spinner />;
         if(this.props.ing){
             OrderSummaryVar = <OrderSummary 
-            ingredients = {this.props.ing}
-            modalclose={this.modalClose}
-            orderContinue={this.orderContinue}
-            totalPrice={this.props.price}
-        />;
+                ingredients = {this.props.ing}
+                modalclose={this.modalClose}
+                orderContinue={this.orderContinue}
+                totalPrice={this.props.price}
+            />;
             // console.log(this.props);
         burger = (
-        <Fragment>
-            <Burger ingredients={this.props.ing}></Burger>
-            <BuildControls 
-                add={this.props.onAddIng}
-                rmv={this.props.onRemoveIng}
-                totalPrice={this.props.price}
-                purchaseable={this.updatePurchse(this.props.ing)}
-                modalOpen={this.modalOpen}
-            />
-        </Fragment>
+            <Fragment>
+                <Burger ingredients={this.props.ing}></Burger>
+                <BuildControls
+                    add={this.props.onAddIng}
+                    rmv={this.props.onRemoveIng}
+                    totalPrice={this.props.price}
+                    purchaseable={this.updatePurchse(this.props.ing)}
+                    modalOpen={this.modalOpen}
+                />
+            </Fragment>
         )
 
 
@@ -106,16 +106,19 @@ class BurgerBuilder extends Component {
 }
 
 const mapStateToProps = state => {
-        // console.log(state.total_price);
+        console.log(state);
     return {
         ing: state.ingredients,
-        price: state.total_price
+        price: state.total_price,
+        error: state.error
     }
 }
 const mapDispatchToProps = dispatch => {
+    // console.log(dispatch);
     return {
-        onAddIng: (ingName) => dispatch({type: actionType.ADD_INGREDIENT, ingredientName: ingName}),
-        onRemoveIng: (ingName) => dispatch({type: actionType.REMOVE_INGREDIENT, ingredientName: ingName}) 
+        onAddIng: (ingName) => dispatch(burgerActions.addIngredient(ingName)),
+        onRemoveIng: (ingName) => dispatch(burgerActions.removeIngredient(ingName)),
+        initIngredt: () => dispatch(burgerActions.initIngredinets())
     }
 }
 
