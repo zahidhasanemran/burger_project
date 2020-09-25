@@ -49,7 +49,8 @@ const burgerReducer = (state = initailState, action) => {
                 return {
                     ...state,
                     ingredients: action.ingredients, // check payload name 
-                    error: false
+                    error: false,
+                    total_price: 2
                 }
     
         default:

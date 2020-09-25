@@ -26,15 +26,65 @@ export const orderStart = () => {
 };
 
 
+export const purchaseInit = () => {
+    return {
+        type: actionTypes.PURCHASE_INIT
+    }
+};
+
+
 
 export const orderStored = (orderData) => {
     return dispatch => {
         orderInstance.post('/orders.json', orderData)
         .then(res => {
-            dispatch(successOrder(res.data, orderData));
+            dispatch(successOrder(res.data.name, orderData));
         })
         .catch(error => {
            dispatch(failedOrder(error));
+        });
+    }
+};
+
+
+
+
+export const fetchOrderSuccess = (order) => {
+    return {
+        type: actionTypes.FETCH_ORDER_SUCCESS,
+        orders: order
+    }
+};
+
+export const fetchOrderFailed = (error) => {
+    return {
+        type: actionTypes.FETCH_ORDER_FAILED,
+        error: error
+    }
+};
+export const fetchOrderStart = () => {
+    return {
+        type: actionTypes.FETCH_ORDER_INIT
+    }
+};
+
+
+export const fetchOrders = () => {
+    return dispatch => {
+        dispatch(fetchOrderStart());
+        orderInstance.get('/orders.json')
+        .then(res => {
+            const fetchOrders = [];
+            for (const key in res.data) {
+                fetchOrders.push({
+                    ...res.data[key],
+                    id: key
+                });
+            }
+            dispatch(fetchOrderSuccess(fetchOrders));
+        })
+        .catch(error => {
+           dispatch(fetchOrderFailed(error));
         });
     }
 };

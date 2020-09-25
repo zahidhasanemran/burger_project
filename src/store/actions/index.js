@@ -7,5 +7,7 @@ export {
     successOrder,
     failedOrder,
     orderStored,
-    orderStart
+    orderStart,
+    purchaseInit,
+    fetchOrders
 } from './orderACreators';

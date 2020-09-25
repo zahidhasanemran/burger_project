@@ -3,7 +3,7 @@ import CheckoutSummary from '../../components/CheckoutSummary/CheckoutSummary';
 import { Redirect, Route } from 'react-router-dom';
 import ContactData from './ContactData/ContactData';
 import { connect } from 'react-redux';
-
+import * as actions from '../../store/actions/index'
 
 
 class Checkout extends Component {
@@ -28,8 +28,14 @@ class Checkout extends Component {
             
         }
 
+        // this.props.initPurchase()
+
         this.setState({ingredients: ingredients, total_price: price});
     }
+
+    // componentDidMount(){
+        
+    // }
 
     chekcoutCancelHandle = () =>{
         this.props.history.goBack();
@@ -45,13 +51,17 @@ class Checkout extends Component {
         
         let chckout = <Redirect to="/"/>
         if(this.props.ing){
+            const purchaseRedirect = this.props.purchased ? <Redirect to="/" /> : null;
             chckout = (
-                <CheckoutSummary 
-                    ingredients={this.props.ing} 
-                    chekcoutCancel={this.chekcoutCancelHandle}
-                    chekcoutContinue={this.chekcoutContiHandle} 
+                <div>
+                    {purchaseRedirect}
+                    <CheckoutSummary 
+                        ingredients={this.props.ing} 
+                        chekcoutCancel={this.chekcoutCancelHandle}
+                        chekcoutContinue={this.chekcoutContiHandle} 
 
-                />
+                    />
+                </div>
             )
         }
 
@@ -68,13 +78,14 @@ class Checkout extends Component {
 
 const mapStateToProps = state => {
     return {
-        ing: state.ingredients,
-        price: state.total_price
+        ing: state.burgerReducer.ingredients,
+        price: state.orderReducer.total_price,
+        purchased: state.orderReducer.purchased
     }
 }
 // const mapDispatchToProps = dispatch => {
 //     return {
-        
+//         initPurchase: () => dispatch(actions.purchaseInit())
 //     }
 // }
 
