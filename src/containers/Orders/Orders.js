@@ -16,23 +16,8 @@ class Orders extends Component {
     }
 
     componentDidMount(){
-        this.props.loadOrder();
-        // orderInstance.get('/orders.json')
-        // .then(res => {
-        //     // console.log(res.data);
-        //     const fetchOrders = [];
-        //     for (const key in res.data) {
-        //         fetchOrders.push({
-        //             ...res.data[key],
-        //             id: key
-        //         });
-        //     }
-        //     this.setState({loading: false, orders: fetchOrders})
-        //     console.log(this.state.orders.length);
-        // })
-        // .catch(err => {
-        //     this.setState({loading: false})
-        // })
+        this.props.loadOrder(this.props.token);
+        
     }
 
 
@@ -59,13 +44,14 @@ class Orders extends Component {
 const mapStateToProps = state => {
     return {
         orders: state.orderReducer.orders,
-        loading: state.orderReducer.loading
+        loading: state.orderReducer.loading,
+        token: state.authReducer.token
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        loadOrder : () => dispatch(actions.fetchOrders())
+        loadOrder : (token) => dispatch(actions.fetchOrders(token))
     }
 }
 

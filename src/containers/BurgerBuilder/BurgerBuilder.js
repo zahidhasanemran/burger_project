@@ -50,7 +50,11 @@ class BurgerBuilder extends Component {
     }
 
     modalOpen = () => {
-        this.setState({orderModal: true})
+        if(this.props.isAuth){
+            this.setState({orderModal: true})
+        }else{
+            this.props.history.push('/auth')
+        }
     }
 
     
@@ -83,6 +87,7 @@ class BurgerBuilder extends Component {
                     totalPrice={this.props.price}
                     purchaseable={this.updatePurchse(this.props.ing)}
                     modalOpen={this.modalOpen}
+                    isAuth={this.props.isAuth}
                 />
             </Fragment>
         )
@@ -111,7 +116,8 @@ const mapStateToProps = state => {
     return {
         ing: state.burgerReducer.ingredients,
         price: state.burgerReducer.total_price,
-        error: state.burgerReducer.error
+        error: state.burgerReducer.error,
+        isAuth: state.authReducer.token !== null
     }
 }
 const mapDispatchToProps = dispatch => {

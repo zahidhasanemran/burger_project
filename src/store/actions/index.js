@@ -11,3 +11,8 @@ export {
     purchaseInit,
     fetchOrders
 } from './orderACreators';
+
+export {
+    auth,
+    logOut
+} from './authActions';

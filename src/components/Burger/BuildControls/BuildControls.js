@@ -28,7 +28,7 @@ const BuildControls = (props) => {
                 className={classes.OrderButton}
                 disabled={!props.purchaseable}
                 onClick={props.modalOpen}
-            >Order Now</button>
+            >{props.isAuth ? 'Order Now' : 'Signup to Order'}</button>
         </div>
     );
 };

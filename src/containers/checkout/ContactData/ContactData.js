@@ -111,7 +111,7 @@ class ContactData extends Component {
         }
         
 
-        this.props.orderRun(order);
+        this.props.orderRun(order, this.props.token);
 
     }
 
@@ -221,17 +221,18 @@ class ContactData extends Component {
 }
 
 const mapStateToProps = state => {
-    console.log(state);
+    // console.log(state);
     return {
         ing: state.ingredients,
         price: state.total_price,
-        loading: state.loading
+        loading: state.loading,
+        token: state.authReducer.token
     }
 }
 
 const mapDispatchToProps = dispatch => {
     return {
-        orderRun: (orderData) => dispatch(actions.orderStored(orderData)),
+        orderRun: (orderData, token) => dispatch(actions.orderStored(orderData, token)),
         orderStart: () => dispatch(actions.orderStart())
     }
 }

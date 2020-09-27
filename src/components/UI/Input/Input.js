@@ -27,7 +27,7 @@ const Input = (props) => {
             break;
     
         case ('input'):
-            inputEl = <input className={inputClass.join(' ')} type="text" {...props.elementConfig} value={props.vlaue}  onChange={props.changed}/>
+            inputEl = <input autoComplete="true" className={inputClass.join(' ')} type="text" {...props.elementConfig} value={props.vlaue}  onChange={props.changed}/>
             break;
     
         default:

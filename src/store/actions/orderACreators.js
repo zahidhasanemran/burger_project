@@ -34,9 +34,9 @@ export const purchaseInit = () => {
 
 
 
-export const orderStored = (orderData) => {
+export const orderStored = (orderData, token) => {
     return dispatch => {
-        orderInstance.post('/orders.json', orderData)
+        orderInstance.post('/orders.json?auth=' + token, orderData)
         .then(res => {
             dispatch(successOrder(res.data.name, orderData));
         })
@@ -69,10 +69,10 @@ export const fetchOrderStart = () => {
 };
 
 
-export const fetchOrders = () => {
+export const fetchOrders = (token) => {
     return dispatch => {
         dispatch(fetchOrderStart());
-        orderInstance.get('/orders.json')
+        orderInstance.get('/orders.json?auth=' + token)
         .then(res => {
             const fetchOrders = [];
             for (const key in res.data) {
